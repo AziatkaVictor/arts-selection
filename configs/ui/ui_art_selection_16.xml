@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="windows-1251" ?> 
+<gui>
+    <art_item>
+	    <name width="158" height="20"/>
+	</art_item>
+	<container x="254" y="50" width="508" height="668">
+        <texture x="0" y="0" width="508" height="668" stretch="1">ui_art_selection_background</texture>
+
+        <title x="20" y="20" width="467" height="20">
+            <text font="graffiti22" align="c"></text>
+        </title>
+        <title_texture x="20" y="15" width="467" height="30">
+            <texture x="0" y="0" width="467" height="30" stretch="1">ui_art_selection_background</texture>
+        </title_texture>
+
+        <info_item x="20" y="60" width="300" height="588">
+
+            <title_texture x="0" y="0" width="300" height="128">
+                <texture x="0" y="0" width="300" height="128" stretch="1">ui_art_selection_background</texture>
+            </title_texture>
+
+            <picture x="0" y="0" width="102" height="128" stretch="1">
+		        <texture width="102" height="128">ui\ui_noise</texture>
+	        </picture>
+            <info_item_title x="112" y="5" width="188" height="20">
+                <text font="graffiti22" align="l"></text>
+            </info_item_title>
+            <info_item_descr x="112" y="28" width="188" height="103" complex_mode="1">
+                <text font="letterica16" align="l"></text>
+            </info_item_descr>
+
+            <info_item_rank_and_cost x="0" y="138" width="300" height="80" complex_mode="1">
+                <title x="5" y="5" width="300" height="20" complex_mode="1">
+                    <text font="graffiti22" align="l"></text>
+                </title>
+                <content x="5" y="30" width="300" height="50" complex_mode="1">
+                    <text font="letterica16" align="l"></text>
+                </content>
+                <background x="0" y="0" width="300" height="80">
+                    <texture x="0" y="0" width="300" height="80" stretch="1">ui_art_selection_background</texture>
+                </background>
+            </info_item_rank_and_cost>
+
+            <info_item_parameters x="0" y="228" width="146" height="190" complex_mode="1">
+                <title x="5" y="5" width="146" height="20" complex_mode="1">
+                    <text font="graffiti22" align="l"></text>
+                </title>
+                <content x="5" y="30" width="146" height="160" complex_mode="1">
+                    <text font="letterica16" align="l"></text>
+                </content>
+                <background x="0" y="0" width="146" height="190">
+                    <texture x="0" y="0" width="146" height="190" stretch="1">ui_art_selection_background</texture>
+                </background>
+            </info_item_parameters>
+
+            <info_item_items x="156" y="228" width="146" height="190" complex_mode="1">
+                <title x="5" y="5" width="146" height="20" complex_mode="1">
+                    <text font="graffiti22" align="l"></text>
+                </title>
+                <content x="5" y="30" width="146" height="160" complex_mode="1">
+                    <text font="letterica16" align="l"></text>
+                </content>
+                <background x="0" y="0" width="146" height="190">
+                    <texture x="0" y="0" width="146" height="190" stretch="1">ui_art_selection_background</texture>
+                </background>
+            </info_item_items>
+
+            <info_item_places x="0" y="428" width="300" height="160" complex_mode="1">
+                <title x="5" y="5" width="300" height="20" complex_mode="1">
+                    <text font="graffiti22" align="l"></text>
+                </title>
+                <content x="5" y="30" width="300" height="130" complex_mode="1">
+                    <text font="letterica16" align="l"></text>
+                </content>
+                <background x="0" y="0" width="300" height="160">
+                    <texture x="0" y="0" width="300" height="160" stretch="1">ui_art_selection_background</texture>
+                </background>
+            </info_item_places>
+
+            <info_item_hide x="0" y="284" width="300" height="30">
+                <text font="graffiti22" align="c"></text>
+            </info_item_hide>
+        </info_item>
+
+        <list_texture x="330" y="60" width="158" height="558">
+            <texture x="0" y="0" width="158" height="558" stretch="1">ui_art_selection_background</texture>
+        </list_texture>
+        <list_items x="330" y="60" width="158" height="558" can_select="1" item_height="30" always_show_scroll="0">
+            <font b="210" g="210" r="210" font="letterica16"/>
+        </list_items>
+
+        <info_item_button_confirm x="330" y="628" width="158" height="20">
+            <texture x="0" y="0" width="158" height="20" stretch="1">ui_art_selection_background</texture>
+            <text font="letterica18" align="c">st_selection_confirm_16</text>
+        </info_item_button_confirm>
+    </container>
+</gui>
