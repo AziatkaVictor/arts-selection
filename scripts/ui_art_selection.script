@@ -162,9 +162,9 @@ end
 
 function ui_art_selection_gui:FillList(tbl)
 	self.art_list:RemoveAll()
-    local infoName = tbl[i].result .. "_recipe"
 	
 	for i = 1, #tbl do
+        local infoName = tbl[i].result .. "_recipe"
         if (tbl[i].needRecipe) then
             if (tbl[i].recipe) then 
                 infoName = tbl[i].recipe
@@ -172,6 +172,8 @@ function ui_art_selection_gui:FillList(tbl)
             if (infoName) then
                 self:AddItemToList(tbl[i])
             end
+        else
+            self:AddItemToList(tbl[i])
         end
 	end
 end
@@ -256,6 +258,7 @@ function ui_art_selection_gui:OnListItemClicked()
             local text_parameters = ""
             local index = 1
             local info_text = ""
+            local color = ""
 
             for j = 1, #parameters_speed do
                 local parameters_value = system_ini():r_string(table_item.result, parameters_speed[j].name)
@@ -278,10 +281,11 @@ function ui_art_selection_gui:OnListItemClicked()
 
                 if parameters_immunity[j].value ~= 0 then
                     if parameters_speed[j].value < 0 then
-                        info_text = game.translate_string("%c[255,255,120,120]" .. parameters_immunity[j].text .. ": " .. parameters_immunity[j].value .. "%c[default]")
+                        color = "%c[255,255,120,120]"
                     else
-                        info_text = game.translate_string("%c[255,120,255,120]" .. parameters_immunity[j].text .. ": " .. parameters_immunity[j].value .. "%c[default]")
+                        color = "%c[255,120,255,120]"
                     end
+                    info_text = game.translate_string(color .. parameters_immunity[j].text .. ": " .. parameters_immunity[j].value .. "%c[default]")
                     text_parameters = text_parameters .. info_text .. text
                     index = index + 1
                 end
@@ -296,11 +300,12 @@ function ui_art_selection_gui:OnListItemClicked()
 
             for j = 1, #table_item.items do
                 if db.actor:object(table_item.items[j]) then
-                    text_items = text_items .. game.translate_string("%c[255,120,200,120]" .. game.translate_string(system_ini():r_string(table_item.items[j], "inv_name")) .. "%c[default]") .. text
+                    color = "%c[255,200,120,120]"
                 else
-                   HaveAllItems = false
-                   text_items = text_items .. game.translate_string("%c[255,200,120,120]" .. game.translate_string(system_ini():r_string(table_item.items[j], "inv_name")) .. "%c[default]") .. text
+                    color = "%c[255,200,120,120]"
+                    HaveAllItems = false
                 end
+                text_items = text_items .. game.translate_string(color .. game.translate_string(system_ini():r_string(table_item.items[j], "inv_name")) .. "%c[default]") .. text
             end
 
             --################################################################
@@ -308,17 +313,21 @@ function ui_art_selection_gui:OnListItemClicked()
             --################################################################
             
             local text_places = ""
+            local insideZoneText = ""
             local HavePlace = false
 
             if (table_item.places) then
                 for j = 1, #table_item.places do
                     if xr_conditions.actor_in_zone(actor, npc, {table_item.places[j]}) then
-                        text_places = text_places .. game.translate_string("st_" .. table_item.places[j] .. "_name") .. game.translate_string(" %c[255,120,200,120](пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)%c[default]") .. text
+                        insideZoneText = game.translate_string(" %c[255,120,200,120](В зоне аномалии)%c[default]")
                         HavePlace = true
                     else
-                        text_places = text_places .. game.translate_string("st_" .. table_item.places[j] .. "_name") .. game.translate_string(" %c[255,200,120,120](пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)%c[default]") .. text
+                        insideZoneText = game.translate_string(" %c[255,200,120,120](Вне зоны аномалии)%c[default]")
                     end
+                    text_places = text_places .. game.translate_string("st_" .. table_item.places[j] .. "_name") .. insideZoneText .. text
                 end
+            else
+                HavePlace = true
             end
             
             self.info_item_descr:SetTextST(text_cost_and_rank)
