@@ -2,7 +2,20 @@
 
 Давным-давно, от нечего делать, я решил сделать небольшой скрипт, для селекции артефактов, основанный на GUI. Это было не легко и в итоге я не могу утверждать, что сделал все до конца, но теперь оно работает. Так как я использовать это не буду, а как-то выкидывать на помойку не хочется, то просто выложу это сюда.
 
-![Демонстрация](url/text.png)
+<p align="center">
+    <img src="https://i.ibb.co/HdtD0vM/ss-04-06-23-20-32-49-zaton.jpg" width="47%">
+    <img src="https://i.ibb.co/F6RnrKJ/ss-04-06-23-20-32-59-zaton.jpg" width="47%">
+<p>
+
+<p align="center">
+    <img src="https://i.ibb.co/VMX54QZ/ss-04-06-23-20-32-45-zaton.jpg" width="47%">
+    <img src="https://i.ibb.co/g9kFyJ4/ss-04-06-23-20-33-10-zaton.jpg" width="47%">
+<p>
+
+<p align="center">
+    <img src="https://i.ibb.co/10jj6nF/ss-04-06-23-20-32-46-zaton.jpg" width="47%">
+    <img src="https://i.ibb.co/9ZWkfwj/ss-04-06-23-20-32-47-zaton.jpg" width="47%">
+<p>
 
 Реализован такой функционал:
 
