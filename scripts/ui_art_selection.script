@@ -162,10 +162,16 @@ end
 
 function ui_art_selection_gui:FillList(tbl)
 	self.art_list:RemoveAll()
+    local infoName = tbl[i].result .. "_recipe"
 	
 	for i = 1, #tbl do
-        if (tbl[i].needRecipe) and (has_alife_info(tbl[i].recipe)) then
-		    self:AddItemToList(tbl[i])
+        if (tbl[i].needRecipe) then
+            if (tbl[i].recipe) then 
+                infoName = tbl[i].recipe
+            end
+            if (infoName) then
+                self:AddItemToList(tbl[i])
+            end
         end
 	end
 end
