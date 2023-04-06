@@ -20,9 +20,29 @@ local selection_table = {
     },
     {
         result = "af_mincer_meat",
+        items = {"wpn_pm_actor"},
+        image = "ui_art_selection_items_1",
+        chance = 0,
+    },
+    {
+        result = "af_mincer_meat",
+        items = {"wpn_pm_actor"},
+        image = "ui_art_selection_items_1",
+        chance = 25,
+        needRecipe = true,
+        recipe = "af_mincer_meat_recipe25"
+    },
+    {
+        result = "af_mincer_meat",
         items = {"af_fireball", "af_electra_moonlight", "af_dummy_dummy", "af_eye"},
         places = places_table.toxic,
-        needRecipe = true
+    },
+    {
+        result = "af_mincer_meat",
+        items = {"af_fireball", "af_electra_moonlight", "af_dummy_dummy", "af_eye"},
+        places = places_table.gravi,
+        needRecipe = true,
+        recipe = "af_mincer_meat_recipe_gravi"
     },
 }
 
@@ -54,12 +74,17 @@ local parameters_immunity = {
 
 function ui_art_selection_gui_list_item:__init(height) super(height)
 	self.name					    = self:GetTextItem()
+    self.index                      = 0
 	self:SetTextColor			    (GetARGB(255, 210, 210, 210))
 	self.name:SetWndSize		    (vector2():set(220, height))
 	self.name:SetEllipsis		    (true)
 end
 
 function ui_art_selection_gui_list_item:__finalize()
+end
+
+function ui_art_selection_gui_list_item:getItem()
+    return selection_table[tonumber(self.index)]
 end
 
 function ui_art_selection_gui:__init(owner) super()
@@ -124,37 +149,17 @@ function ui_art_selection_gui:InitControls()
     self.check = self.info_item_picture:GetWidth()
     self.info_item_button:TextControl():SetText(buttonTitle)
 
-    self.info_item_title:SetText("")
-    self.info_item_descr:SetText("")
-    self.info_item_items:SetText("")
+    self:HideInfo()
 
-    self.info_item_title_texture:Show(false)
-    self.info_item_items_texture:Show(false)
-    self.info_item_parameters_texture:Show(false)
-    self.info_item_rank_and_cost_texture:Show(false)
-    self.info_item_places_texture:Show(false)
-    self.info_item_picture:Show(false)
-
-    self.info_item_items:SetText("")
-    self.info_item_parameters:SetText("")
-    self.info_item_rank_and_cost:SetText("")
-    self.info_item_places:SetText("")
-
-    self.info_item_items_title:SetText("")
-    self.info_item_parameters_title:SetText("")
-    self.info_item_rank_and_cost_title:SetText("")
-    self.info_item_places_title:SetText("")
     self.main_panel_title:SetText(title)
-    self.info_item_hide:SetText(infoTitle)
-    self.info_item_button:Enable(false)
     self.art_list:ShowSelectedItem(true)
 end
 
-function ui_art_selection_gui:AddItemToList(item)
+function ui_art_selection_gui:AddItemToList(item, index)
 	local _itm = ui_art_selection_gui_list_item(30)
     local name = system_ini():r_string(item.result, "inv_name")
 
-    _itm.result = _itm:AddTextField(item.result, 100)
+    _itm.index = index
 	_itm.name:SetTextST(name)
 
 	self.art_list:AddExistingItem(_itm)
@@ -164,16 +169,16 @@ function ui_art_selection_gui:FillList(tbl)
 	self.art_list:RemoveAll()
 	
 	for i = 1, #tbl do
-        local infoName = tbl[i].result .. "_recipe"
         if (tbl[i].needRecipe) then
+            local infoName = tbl[i].result .. "_recipe"
             if (tbl[i].recipe) then 
                 infoName = tbl[i].recipe
             end
-            if (infoName) then
-                self:AddItemToList(tbl[i])
+            if (has_alife_info(infoName)) then
+                self:AddItemToList(tbl[i], i)
             end
         else
-            self:AddItemToList(tbl[i])
+            self:AddItemToList(tbl[i], i)
         end
 	end
 end
@@ -181,6 +186,31 @@ end
 function ui_art_selection_gui:InitCallBacks()
 	self:AddCallback("art_list_window",     ui_events.LIST_ITEM_CLICKED,    self.OnListItemClicked,             self)
     self:AddCallback("button_confirm",		ui_events.BUTTON_CLICKED,       self.OnButton_confirm_clicked,	    self)
+end
+
+function ui_art_selection_gui:HideInfo()
+    self.info_item_title:SetText("")
+    self.info_item_descr:SetText("")
+    self.info_item_items:SetText("")
+
+    self.info_item_items:SetText("")
+    self.info_item_parameters:SetText("")
+    self.info_item_rank_and_cost:SetText("")
+    self.info_item_places:SetText("")
+
+    self.info_item_title_texture:Show(false)
+    self.info_item_items_texture:Show(false)
+    self.info_item_parameters_texture:Show(false)
+    self.info_item_rank_and_cost_texture:Show(false)
+    self.info_item_places_texture:Show(false)
+    self.info_item_picture:Show(false)
+
+    self.info_item_items_title:SetText("")
+    self.info_item_parameters_title:SetText("")
+    self.info_item_rank_and_cost_title:SetText("")
+    self.info_item_places_title:SetText("")
+    self.info_item_hide:SetText(infoTitle)
+    self.info_item_button:Enable(false)
 end
 
 function ui_art_selection_gui:OnListItemClicked()
@@ -191,179 +221,156 @@ function ui_art_selection_gui:OnListItemClicked()
 	local item = self.art_list:GetSelectedItem()
 
 	if item == nil then
-        self.info_item_title:SetText("")
-        self.info_item_descr:SetText("")
-        self.info_item_items:SetText("")
-
-        self.info_item_items:SetText("")
-        self.info_item_parameters:SetText("")
-        self.info_item_rank_and_cost:SetText("")
-        self.info_item_places:SetText("")
-
-        self.info_item_title_texture:Show(false)
-        self.info_item_items_texture:Show(false)
-        self.info_item_parameters_texture:Show(false)
-        self.info_item_rank_and_cost_texture:Show(false)
-        self.info_item_places_texture:Show(false)
-        self.info_item_picture:Show(false)
-
-        self.info_item_items_title:SetText("")
-        self.info_item_parameters_title:SetText("")
-        self.info_item_rank_and_cost_title:SetText("")
-        self.info_item_places_title:SetText("")
-        self.info_item_hide:SetText(infoTitle)
-        self.info_item_button:Enable(false)
+        self:HideInfo()
         return
     end
 
-    local item_result = item.result:GetText()
+    local table_item = item:getItem()
+    if not (table_item) then
+        return
+    end
 
-    for i = 1, #selection_table do
-        local table_item = selection_table[i]
-		if item_result == table_item.result then
+    self.info_item_title_texture:Show(true)
+    self.info_item_items_texture:Show(true)
+    self.info_item_parameters_texture:Show(true)
+    self.info_item_rank_and_cost_texture:Show(true)
+    self.info_item_places_texture:Show(true)
+    self.info_item_picture:Show(true)
 
-            self.info_item_title_texture:Show(true)
-            self.info_item_items_texture:Show(true)
-            self.info_item_parameters_texture:Show(true)
-            self.info_item_rank_and_cost_texture:Show(true)
-            self.info_item_places_texture:Show(true)
-            self.info_item_picture:Show(true)
+    local name                      = system_ini():r_string(table_item.result, "inv_name")
+    local description               = system_ini():r_string(table_item.result, "description")
+    local hit_absorbation_sect      = system_ini():r_string(table_item.result, "hit_absorbation_sect")
+    local cost                      = system_ini():r_string(table_item.result, "cost")
+    local rank                      = system_ini():r_string(table_item.result, "af_rank")
+    
+    self.info_item_title:SetTextST(name)
+    self.info_item_hide:SetText("")
 
-            local name                      = system_ini():r_string(table_item.result, "inv_name")
-            local description               = system_ini():r_string(table_item.result, "description")
-            local hit_absorbation_sect      = system_ini():r_string(table_item.result, "hit_absorbation_sect")
-            local cost                      = system_ini():r_string(table_item.result, "cost")
-            local rank                      = system_ini():r_string(table_item.result, "af_rank")
-            
-            self.info_item_title:SetTextST(name)
-            self.info_item_hide:SetText("")
+    local text = " "
+    text = text .. string.format("%s\\n", text)
 
-            local text = " "
-            text = text .. string.format("%s\\n", text)
+    --################################################################
+    --  Cбор цены и уровня артефакта
+    --################################################################
 
-            --################################################################
-            --  Cбор цены и уровня артефакта
-            --################################################################
+    local text_cost_and_rank = game.translate_string("%c[255,120,120,120]Стоимость: %c[default]") .. cost .. " RU" .. text .. game.translate_string("%c[255,120,120,120]Уровень: %c[default]") .. rank .. text
+    
+    if table_item.chance then
+        text_cost_and_rank = text_cost_and_rank .. game.translate_string("%c[255,120,120,120]Шанс успеха: %c[default]") .. table_item.chance .. " %"
+    end
 
-            local text_cost_and_rank = game.translate_string("%c[255,120,120,120]Стоимость: %c[default]") .. cost .. " RU" .. text .. game.translate_string("%c[255,120,120,120]Уровень: %c[default]") .. rank .. text
-            
-            if table_item.chance then
-                text_cost_and_rank = text_cost_and_rank .. game.translate_string("%c[255,120,120,120]Шанс успеха: %c[default]") .. table_item.chance .. " %"
-            end
+    --################################################################
+    --  Cбор параметров артефакта
+    --################################################################
 
-            --################################################################
-            --  Cбор параметров артефакта
-            --################################################################
+    local text_parameters = ""
+    local index = 1
+    local info_text = ""
+    local color = ""
 
-            local text_parameters = ""
-            local index = 1
-            local info_text = ""
-            local color = ""
+    for j = 1, #parameters_speed do
+        local parameters_value = system_ini():r_string(table_item.result, parameters_speed[j].name)
+        parameters_speed[j].value = tonumber(parameters_value) * parameters_speed[j].magnitude
 
-            for j = 1, #parameters_speed do
-                local parameters_value = system_ini():r_string(table_item.result, parameters_speed[j].name)
-                parameters_speed[j].value = tonumber(parameters_value) * parameters_speed[j].magnitude
-
-                if parameters_speed[j].value ~= 0 then
-                    if parameters_speed[j].value < 0 then
-                        info_text = game.translate_string("%c[255,255,120,120]" .. parameters_speed[j].text .. ": " .. parameters_speed[j].value .. "%c[default]")
-                    else
-                        info_text = game.translate_string("%c[255,120,255,120]" .. parameters_speed[j].text .. ": " .. parameters_speed[j].value .. "%c[default]")
-                    end
-                    text_parameters = text_parameters .. info_text .. text
-                    index = index + 1
-                end
-            end
-
-            for j = 1, #parameters_immunity do
-                local parameters_value = system_ini():r_string(hit_absorbation_sect, parameters_immunity[j].name)
-                parameters_immunity[j].value = tonumber(parameters_value) * parameters_immunity[j].magnitude
-
-                if parameters_immunity[j].value ~= 0 then
-                    if parameters_speed[j].value < 0 then
-                        color = "%c[255,255,120,120]"
-                    else
-                        color = "%c[255,120,255,120]"
-                    end
-                    info_text = game.translate_string(color .. parameters_immunity[j].text .. ": " .. parameters_immunity[j].value .. "%c[default]")
-                    text_parameters = text_parameters .. info_text .. text
-                    index = index + 1
-                end
-            end
-
-            --################################################################
-            --  Cбор ингредиентов
-            --################################################################
-
-            local text_items = ""
-            local HaveAllItems = true
-
-            for j = 1, #table_item.items do
-                if db.actor:object(table_item.items[j]) then
-                    color = "%c[255,200,120,120]"
-                else
-                    color = "%c[255,200,120,120]"
-                    HaveAllItems = false
-                end
-                text_items = text_items .. game.translate_string(color .. game.translate_string(system_ini():r_string(table_item.items[j], "inv_name")) .. "%c[default]") .. text
-            end
-
-            --################################################################
-            --  Cбор зон для селекции
-            --################################################################
-            
-            local text_places = ""
-            local insideZoneText = ""
-            local HavePlace = false
-
-            if (table_item.places) then
-                for j = 1, #table_item.places do
-                    if xr_conditions.actor_in_zone(actor, npc, {table_item.places[j]}) then
-                        insideZoneText = game.translate_string(" %c[255,120,200,120](В зоне аномалии)%c[default]")
-                        HavePlace = true
-                    else
-                        insideZoneText = game.translate_string(" %c[255,200,120,120](Вне зоны аномалии)%c[default]")
-                    end
-                    text_places = text_places .. game.translate_string("st_" .. table_item.places[j] .. "_name") .. insideZoneText .. text
-                end
+        if parameters_speed[j].value ~= 0 then
+            if parameters_speed[j].value < 0 then
+                info_text = game.translate_string("%c[255,255,120,120]" .. parameters_speed[j].text .. ": " .. parameters_speed[j].value .. "%c[default]")
             else
-                HavePlace = true
+                info_text = game.translate_string("%c[255,120,255,120]" .. parameters_speed[j].text .. ": " .. parameters_speed[j].value .. "%c[default]")
             end
-            
-            self.info_item_descr:SetTextST(text_cost_and_rank)
-            self.info_item_descr:SetEllipsis(true)
-
-            self.info_item_items:SetText(text_items)
-            self.info_item_parameters:SetText(text_parameters)
-            self.info_item_rank_and_cost:SetTextST(description)
-            self.info_item_places:SetText(text_places)
-
-            self.info_item_items_title:SetText(itemsTitle)
-            self.info_item_parameters_title:SetText(paramsTitle)
-            self.info_item_rank_and_cost_title:SetText(rankTitle)
-            self.info_item_places_title:SetText(placesTitle)
-
-            local r = self.info_item_picture:GetTextureRect()
-
-            if table_item.image then
-                self.info_item_picture:InitTexture(table_item.image)
-            else
-                self.info_item_picture:InitTexture("ui\\ui_noise")
-            end
-
-            self.info_item_picture:SetTextureRect(Frect():set(r.x1,r.y1,r.x2,r.y2))
-
-            self.info_item_descr:SetEllipsis(true)
-            self.info_item_items:SetEllipsis(true)
-            self.info_item_parameters:SetEllipsis(true)
-
-            if HaveAllItems == false or HavePlace == false then
-                self.info_item_button:Enable(false)
-            else
-                self.info_item_button:Enable(true)
-            end
+            text_parameters = text_parameters .. info_text .. text
+            index = index + 1
         end
-	end
+    end
+
+    for j = 1, #parameters_immunity do
+        local parameters_value = system_ini():r_string(hit_absorbation_sect, parameters_immunity[j].name)
+        parameters_immunity[j].value = tonumber(parameters_value) * parameters_immunity[j].magnitude
+
+        if parameters_immunity[j].value ~= 0 then
+            if parameters_speed[j].value < 0 then
+                color = "%c[255,255,120,120]"
+            else
+                color = "%c[255,120,255,120]"
+            end
+            info_text = game.translate_string(color .. parameters_immunity[j].text .. ": " .. parameters_immunity[j].value .. "%c[default]")
+            text_parameters = text_parameters .. info_text .. text
+            index = index + 1
+        end
+    end
+
+    --################################################################
+    --  Cбор ингредиентов
+    --################################################################
+
+    local text_items = ""
+    local HaveAllItems = true
+
+    for j = 1, #table_item.items do
+        if db.actor:object(table_item.items[j]) then
+            color = "%c[255,120,200,120]"
+        else
+            color = "%c[255,200,120,120]"
+            HaveAllItems = false
+        end
+        text_items = text_items .. game.translate_string(color .. game.translate_string(system_ini():r_string(table_item.items[j], "inv_name")) .. "%c[default]") .. text
+    end
+
+    --################################################################
+    --  Cбор зон для селекции
+    --################################################################
+    
+    local text_places = ""
+    local insideZoneText = ""
+    local HavePlace = false
+
+    if (table_item.places) then
+        for j = 1, #table_item.places do
+            if xr_conditions.actor_in_zone(actor, npc, {table_item.places[j]}) then
+                insideZoneText = game.translate_string(" %c[255,120,200,120](В зоне аномалии)%c[default]")
+                HavePlace = true
+            else
+                insideZoneText = game.translate_string(" %c[255,200,120,120](Вне зоны аномалии)%c[default]")
+            end
+            text_places = text_places .. game.translate_string("st_" .. table_item.places[j] .. "_name") .. insideZoneText .. text
+        end
+    else
+        text_places = "Необходимости в нахождении в аномальной зоне нету." .. text
+        HavePlace = true
+    end
+    
+    self.info_item_descr:SetTextST(text_cost_and_rank)
+    self.info_item_descr:SetEllipsis(true)
+
+    self.info_item_items:SetText(text_items)
+    self.info_item_parameters:SetText(text_parameters)
+    self.info_item_rank_and_cost:SetTextST(description)
+    self.info_item_places:SetText(text_places)
+
+    self.info_item_items_title:SetText(itemsTitle)
+    self.info_item_parameters_title:SetText(paramsTitle)
+    self.info_item_rank_and_cost_title:SetText(rankTitle)
+    self.info_item_places_title:SetText(placesTitle)
+
+    local r = self.info_item_picture:GetTextureRect()
+
+    if table_item.image then
+        self.info_item_picture:InitTexture(table_item.image)
+    else
+        self.info_item_picture:InitTexture("ui\\ui_noise")
+    end
+
+    self.info_item_picture:SetTextureRect(Frect():set(r.x1,r.y1,r.x2,r.y2))
+
+    self.info_item_descr:SetEllipsis(true)
+    self.info_item_items:SetEllipsis(true)
+    self.info_item_parameters:SetEllipsis(true)
+
+    if HaveAllItems == false or HavePlace == false then
+        self.info_item_button:Enable(false)
+    else
+        self.info_item_button:Enable(true)
+    end
 end
 
 function ui_art_selection_gui:OnButton_confirm_clicked()
@@ -373,59 +380,56 @@ function ui_art_selection_gui:OnButton_confirm_clicked()
         return
     end
 
-    local item_result = item.result:GetText()
     local HavePlace, HaveAllItems, table_item_result
+    local table_item_result = item:getItem()
 
-    for i = 1, #selection_table do
-        local table_item = selection_table[i]
+    if not (table_item_result) then
+        return
+    end
 
-		if item_result == table_item.result then
+    --################################################################
+    --  Cбор ингредиентов
+    --################################################################
 
-            --################################################################
-            --  Cбор ингредиентов
-            --################################################################
-
-            table_item_result = table_item
-            for j = 1, #table_item_result.items do
-                if db.actor:object(table_item_result.items[j]) then
-                    HaveAllItems = true
-                else
-                    HaveAllItems = false
-                    return
-                end
-            end
-
-            --################################################################
-            --  Cбор зон для селекции
-            --################################################################
-           
-            if (table_item_result.places) then
-                for j = 1, #table_item_result.places do
-                    if xr_conditions.actor_in_zone(actor, npc, {table_item_result.places[j]}) then
-                        HavePlace = true
-                    end
-                end
-            else
-                HavePlace = true
-            end
+    HaveAllItems = true
+    for j = 1, #table_item_result.items do
+        if not db.actor:object(table_item_result.items[j]) then
+            HaveAllItems = false
+            return
         end
     end
 
-    if HavePlace == true and HaveAllItems == true then
-        
+    --################################################################
+    --  Cбор зон для селекции
+    --################################################################
+    
+    HavePlace = false
+    if (table_item_result.places) then
+        for j = 1, #table_item_result.places do
+            if xr_conditions.actor_in_zone(db.actor, npc, {table_item_result.places[j]}) then
+                HavePlace = true
+            end
+        end
+    else
+        HavePlace = true
+    end
+
+    if HavePlace == true and HaveAllItems == true then  
         for i = 1, #table_item_result.items do
-            xr_effects.remove_item(actor, npc, {table_item_result.items[i]})
+            xr_effects.remove_item(db.actor, npc, {table_item_result.items[i]})
         end
         
         if table_item_result.chance then
             get_chance = math.random(100)
             if get_chance <= table_item_result.chance then
-                alife():create(table_item_result.result,db.actor:position(),db.actor:level_vertex_id(),db.actor:game_vertex_id(),db.actor:id())
+                db.actor:give_game_news("Результат селекции:", "Успех, предмет добавлен в инвентарь", "ui_iconsTotal_grouping", 0, 5000, 0)
+                alife():create(table_item_result.result, db.actor:position(), db.actor:level_vertex_id(), db.actor:game_vertex_id(), db.actor:id())
             else
-                printf("Неудача")
+                db.actor:give_game_news("Результат селекции:", "Провал, провести селекцию не вышло", "ui_iconsTotal_grouping", 0, 5000, 0)
             end
         else
-            alife():create(table_item_result.result,db.actor:position(),db.actor:level_vertex_id(),db.actor:game_vertex_id(),db.actor:id())
+            db.actor:give_game_news("Результат селекции:", "Успех, предмет добавлен в инвентарь", "ui_iconsTotal_grouping", 0, 5000, 0)
+            alife():create(table_item_result.result, db.actor:position(), db.actor:level_vertex_id(), db.actor:game_vertex_id(), db.actor:id())
         end
 
         self:HideDialog()
