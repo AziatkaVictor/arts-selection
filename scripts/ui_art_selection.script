@@ -1,7 +1,7 @@
 class "ui_art_selection_gui" (CUIScriptWnd)
 class "ui_art_selection_gui_list_item" (CUIListBoxItem)
 
--- Места селекции
+-- РњРµСЃС‚Р° СЃРµР»РµРєС†РёРё
 
 local places_table = {
     toxic = {"StoryID_Toxic_Zone"},
@@ -9,7 +9,7 @@ local places_table = {
     heat = {"StoryID_Heat_Zone"},
 }
 
--- Рецепты селекции
+-- Р РµС†РµРїС‚С‹ СЃРµР»РµРєС†РёРё
 
 local selection_table = {
     {
@@ -26,30 +26,30 @@ local selection_table = {
     },
 }
 
--- Конфиг
+-- РљРѕРЅС„РёРі
 
-local title = "СП-182: Селекция аномальных образований"
-local infoTitle = "Панель информации"
-local buttonTitle = "Начать селекцию"
-local itemsTitle = "Ингредиенты" 
-local paramsTitle = "Параметры" 
-local rankTitle = "Информация" 
-local placesTitle = "Места проведения селекции"
+local title = "РЎРџ-182: РЎРµР»РµРєС†РёСЏ Р°РЅРѕРјР°Р»СЊРЅС‹С… РѕР±СЂР°Р·РѕРІР°РЅРёР№"
+local infoTitle = "РџР°РЅРµР»СЊ РёРЅС„РѕСЂРјР°С†РёРё"
+local buttonTitle = "РќР°С‡Р°С‚СЊ СЃРµР»РµРєС†РёСЋ"
+local itemsTitle = "РРЅРіСЂРµРґРёРµРЅС‚С‹" 
+local paramsTitle = "РџР°СЂР°РјРµС‚СЂС‹" 
+local rankTitle = "РРЅС„РѕСЂРјР°С†РёСЏ" 
+local placesTitle = "РњРµСЃС‚Р° РїСЂРѕРІРµРґРµРЅРёСЏ СЃРµР»РµРєС†РёРё"
 
 local parameters_speed          = {
-    {name = "health_restore_speed",         text = "Восст. здоровья",   value = 0,   magnitude = 6600},
-    {name = "radiation_restore_speed",      text = "Радиация",          value = 0,   magnitude = -1000},
-    {name = "satiety_restore_speed",        text = "Насыщение",         value = 0,   magnitude = 10},
-    {name = "power_restore_speed",          text = "Восст. сил",        value = 0,   magnitude = 2000},
-    {name = "bleeding_restore_speed",       text = "Заживление ран",    value = 0,   magnitude = 1000},
-    {name = "additional_inventory_weight",  text = "Макс. вес",         value = 0,   magnitude = 1}
+    {name = "health_restore_speed",         text = "Р’РѕСЃСЃС‚. Р·РґРѕСЂРѕРІСЊСЏ",   value = 0,   magnitude = 6600},
+    {name = "radiation_restore_speed",      text = "Р Р°РґРёР°С†РёСЏ",          value = 0,   magnitude = -1000},
+    {name = "satiety_restore_speed",        text = "РќР°СЃС‹С‰РµРЅРёРµ",         value = 0,   magnitude = 10},
+    {name = "power_restore_speed",          text = "Р’РѕСЃСЃС‚. СЃРёР»",        value = 0,   magnitude = 2000},
+    {name = "bleeding_restore_speed",       text = "Р—Р°Р¶РёРІР»РµРЅРёРµ СЂР°РЅ",    value = 0,   magnitude = 1000},
+    {name = "additional_inventory_weight",  text = "РњР°РєСЃ. РІРµСЃ",         value = 0,   magnitude = 1}
 }
 local parameters_immunity = {
-    {name = "burn_immunity",                text = "Термозащита",       value = 0,   magnitude = 150},
-    {name = "shock_immunity",               text = "Электрозащита",     value = 0,   magnitude = 80},
-    {name = "radiation_immunity",           text = "Радиозащита",       value = 0,   magnitude = 1000},
-    {name = "telepatic_immunity",           text = "Пси-защита",        value = 0,   magnitude = 300},
-    {name = "chemical_burn_immunity",       text = "Химзащита",         value = 0,   magnitude = 150}
+    {name = "burn_immunity",                text = "РўРµСЂРјРѕР·Р°С‰РёС‚Р°",       value = 0,   magnitude = 150},
+    {name = "shock_immunity",               text = "Р­Р»РµРєС‚СЂРѕР·Р°С‰РёС‚Р°",     value = 0,   magnitude = 80},
+    {name = "radiation_immunity",           text = "Р Р°РґРёРѕР·Р°С‰РёС‚Р°",       value = 0,   magnitude = 1000},
+    {name = "telepatic_immunity",           text = "РџСЃРё-Р·Р°С‰РёС‚Р°",        value = 0,   magnitude = 300},
+    {name = "chemical_burn_immunity",       text = "РҐРёРјР·Р°С‰РёС‚Р°",         value = 0,   magnitude = 150}
 }
 
 function ui_art_selection_gui_list_item:__init(height) super(height)
@@ -240,17 +240,17 @@ function ui_art_selection_gui:OnListItemClicked()
             text = text .. string.format("%s\\n", text)
 
             --################################################################
-            --  Cбор цены и уровня артефакта
+            --  CР±РѕСЂ С†РµРЅС‹ Рё СѓСЂРѕРІРЅСЏ Р°СЂС‚РµС„Р°РєС‚Р°
             --################################################################
 
-            local text_cost_and_rank = game.translate_string("%c[255,120,120,120]Стоимость: %c[default]") .. cost .. " RU" .. text .. game.translate_string("%c[255,120,120,120]Уровень: %c[default]") .. rank .. text
+            local text_cost_and_rank = game.translate_string("%c[255,120,120,120]РЎС‚РѕРёРјРѕСЃС‚СЊ: %c[default]") .. cost .. " RU" .. text .. game.translate_string("%c[255,120,120,120]РЈСЂРѕРІРµРЅСЊ: %c[default]") .. rank .. text
             
             if table_item.chance then
-                text_cost_and_rank = text_cost_and_rank .. game.translate_string("%c[255,120,120,120]Шанс успеха: %c[default]") .. table_item.chance .. " %"
+                text_cost_and_rank = text_cost_and_rank .. game.translate_string("%c[255,120,120,120]РЁР°РЅСЃ СѓСЃРїРµС…Р°: %c[default]") .. table_item.chance .. " %"
             end
 
             --################################################################
-            --  Cбор параметров артефакта
+            --  CР±РѕСЂ РїР°СЂР°РјРµС‚СЂРѕРІ Р°СЂС‚РµС„Р°РєС‚Р°
             --################################################################
 
             local text_parameters = ""
@@ -288,7 +288,7 @@ function ui_art_selection_gui:OnListItemClicked()
             end
 
             --################################################################
-            --  Cбор ингредиентов
+            --  CР±РѕСЂ РёРЅРіСЂРµРґРёРµРЅС‚РѕРІ
             --################################################################
 
             local text_items = ""
@@ -304,7 +304,7 @@ function ui_art_selection_gui:OnListItemClicked()
             end
 
             --################################################################
-            --  Cбор зон для селекции
+            --  CР±РѕСЂ Р·РѕРЅ РґР»СЏ СЃРµР»РµРєС†РёРё
             --################################################################
             
             local text_places = ""
@@ -313,10 +313,10 @@ function ui_art_selection_gui:OnListItemClicked()
             if (table_item.places) then
                 for j = 1, #table_item.places do
                     if xr_conditions.actor_in_zone(actor, npc, {table_item.places[j]}) then
-                        text_places = text_places .. game.translate_string("st_" .. table_item.places[j] .. "_name") .. game.translate_string(" %c[255,120,200,120](пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)%c[default]") .. text
+                        text_places = text_places .. game.translate_string("st_" .. table_item.places[j] .. "_name") .. game.translate_string(" %c[255,120,200,120](РїС—Р… РїС—Р…РїС—Р…РїС—Р…РїС—Р… РїС—Р…РїС—Р…РїС—Р…РїС—Р…РїС—Р…РїС—Р…РїС—Р…РїС—Р…)%c[default]") .. text
                         HavePlace = true
                     else
-                        text_places = text_places .. game.translate_string("st_" .. table_item.places[j] .. "_name") .. game.translate_string(" %c[255,200,120,120](пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)%c[default]") .. text
+                        text_places = text_places .. game.translate_string("st_" .. table_item.places[j] .. "_name") .. game.translate_string(" %c[255,200,120,120](РїС—Р…РїС—Р…РїС—Р… РїС—Р…РїС—Р…РїС—Р…РїС—Р… РїС—Р…РїС—Р…РїС—Р…РїС—Р…РїС—Р…РїС—Р…РїС—Р…РїС—Р…)%c[default]") .. text
                     end
                 end
             end
@@ -373,7 +373,7 @@ function ui_art_selection_gui:OnButton_confirm_clicked()
 		if item_result == table_item.result then
 
             --################################################################
-            --  Cбор ингредиентов
+            --  CР±РѕСЂ РёРЅРіСЂРµРґРёРµРЅС‚РѕРІ
             --################################################################
 
             table_item_result = table_item
@@ -387,7 +387,7 @@ function ui_art_selection_gui:OnButton_confirm_clicked()
             end
 
             --################################################################
-            --  Cбор зон для селекции
+            --  CР±РѕСЂ Р·РѕРЅ РґР»СЏ СЃРµР»РµРєС†РёРё
             --################################################################
            
             if (table_item_result.places) then
@@ -413,7 +413,7 @@ function ui_art_selection_gui:OnButton_confirm_clicked()
             if get_chance <= table_item_result.chance then
                 alife():create(table_item_result.result,db.actor:position(),db.actor:level_vertex_id(),db.actor:game_vertex_id(),db.actor:id())
             else
-                printf("Неудача")
+                printf("РќРµСѓРґР°С‡Р°")
             end
         else
             alife():create(table_item_result.result,db.actor:position(),db.actor:level_vertex_id(),db.actor:game_vertex_id(),db.actor:id())
