@@ -43,19 +43,19 @@ use_sound			        = interface\inv_medkit
 
 ```lua
 function actor_binder:use_inventory_item(obj)
-	if(obj) then
-		local s_obj = alife():object(obj:id())
-		if(s_obj) and (s_obj:section_name()=="drug_anabiotic") then
-			xr_effects.disable_ui_only(db.actor, nil)
-			level.add_cam_effector("camera_effects\\surge_02.anm", 10, false, "bind_stalker.anabiotic_callback")
-			level.add_pp_effector("surge_fade.ppe", 11, false)
-			give_info("anabiotic_in_process")
-			_G.mus_vol = get_console():get_float("snd_volume_music")
-			_G.amb_vol = get_console():get_float("snd_volume_eff")
-			get_console():execute("snd_volume_music 0")
-			get_console():execute("snd_volume_eff 0")
-		end
-	end
+    if(obj) then
+        local s_obj = alife():object(obj:id())
+        if(s_obj) and (s_obj:section_name()=="drug_anabiotic") then
+            xr_effects.disable_ui_only(db.actor, nil)
+            level.add_cam_effector("camera_effects\\surge_02.anm", 10, false, "bind_stalker.anabiotic_callback")
+            level.add_pp_effector("surge_fade.ppe", 11, false)
+            give_info("anabiotic_in_process")
+            _G.mus_vol = get_console():get_float("snd_volume_music")
+            _G.amb_vol = get_console():get_float("snd_volume_eff")
+            get_console():execute("snd_volume_music 0")
+            get_console():execute("snd_volume_eff 0")
+        end
+    end
 end
 ```
 
@@ -72,23 +72,23 @@ end
 
 ```lua
 function actor_binder:use_inventory_item(obj)
-	if(obj) then
-		local s_obj = alife():object(obj:id())
-		if(s_obj) and (s_obj:section_name()=="drug_anabiotic") then
-			xr_effects.disable_ui_only(db.actor, nil)
-			level.add_cam_effector("camera_effects\\surge_02.anm", 10, false, "bind_stalker.anabiotic_callback")
-			level.add_pp_effector("surge_fade.ppe", 11, false)
-			give_info("anabiotic_in_process")
-			_G.mus_vol = get_console():get_float("snd_volume_music")
-			_G.amb_vol = get_console():get_float("snd_volume_eff")
-			get_console():execute("snd_volume_music 0")
-			get_console():execute("snd_volume_eff 0")
-		end
-		if(s_obj) and (s_obj:section_name() == "art_selection") then
-			ui_art_selection.RunDialog()
-			alife():create("art_selection", db.actor:position(), db.actor:level_vertex_id(), db.actor:game_vertex_id(), db.actor:id())
-		end
-	end
+    if(obj) then
+        local s_obj = alife():object(obj:id())
+        if(s_obj) and (s_obj:section_name()=="drug_anabiotic") then
+            xr_effects.disable_ui_only(db.actor, nil)
+            level.add_cam_effector("camera_effects\\surge_02.anm", 10, false, "bind_stalker.anabiotic_callback")
+            level.add_pp_effector("surge_fade.ppe", 11, false)
+            give_info("anabiotic_in_process")
+            _G.mus_vol = get_console():get_float("snd_volume_music")
+            _G.amb_vol = get_console():get_float("snd_volume_eff")
+            get_console():execute("snd_volume_music 0")
+            get_console():execute("snd_volume_eff 0")
+        end
+        if(s_obj) and (s_obj:section_name() == "art_selection") then
+            ui_art_selection.RunDialog()
+            alife():create("art_selection", db.actor:position(), db.actor:level_vertex_id(), db.actor:game_vertex_id(), db.actor:id())
+        end
+    end
 end
 ```
 
